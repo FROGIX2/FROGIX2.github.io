@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Свадьба Анастасии и Владислава</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin:0; padding:0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: #100112;
+      color: #eee;
+      line-height: 1.5;
+      position: relative;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* 1. Навигационные точки – увеличены */
+    .nav-dots {
+      position: fixed; top: 50%; right: 30px;
+      transform: translateY(-50%);
+      list-style: none; padding:0; margin:0;
+      z-index: 100;
+    }
+    .nav-dots li {
+      margin: 20px 0; /* увеличенный отступ */
+      position: relative;
+    }
+    .nav-dots a {
+      display: block;
+      width: 20px;  /* увеличенный размер */
+      height: 20px;
+      background: rgba(255,255,255,0.5);
+      border-radius:50%;
+      transition: background .3s;
+    }
+    .nav-dots a:hover { background: #8f15b3; }
+    .nav-dots a:hover::after {
+      content: attr(data-tooltip);
+      position: absolute; right: 30px; top:50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.7); color:#fff;
+      padding:4px 8px; border-radius:4px;
+      white-space: nowrap; font-size:0.9rem;
+    }
+
+    /* Hero */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #2e004f, #6a0e8d);
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .hero::after {
+      content: ''; position: absolute; inset: 0;
+      background: url('texture.png') center/cover; opacity: 0.1;
+    }
+    .hero .card {
+      position: relative; z-index: 1;
+      background: rgba(255,255,255,0.1); backdrop-filter: blur(5px);
+      padding: 3rem 2rem; border-radius: 12px; max-width: 500px;
+    }
+    .hero h1 {
+      font-family: 'Great Vibes', cursive;
+      font-size: 4.5rem; color: #fff; line-height: 1;
+      margin-bottom: 1rem;
+    }
+    .hero h1 br { display:block; line-height:.5; }
+
+    .date-block {
+      display: flex; flex-direction: column; align-items: center;
+      margin-bottom: 1rem; text-transform: uppercase;
+      letter-spacing: 1px; color: #ddd; font-weight: 500;
+      font-size: 0.9rem;
+    }
+    .date-block .main {
+      display: flex; align-items: center; margin: .5rem 0;
+    }
+    .date-block .line { width: 40px; height: 2px; background: #ddd; }
+    .date-block .day {
+      font-family: 'Great Vibes', cursive; font-size: 4rem;
+      margin: 0 0.5rem; color: #fff;
+    }
+    .date-block .sub { display: flex; gap: 1rem; }
+    .date-block .year { margin-top: .3rem; }
+
+    .hero-subtext {
+      margin: 1.5rem 0; font-size: 1rem;
+      color: #e0d8e8; line-height: 1.4;
+    }
+
+    /* Фото-параллакс */
+    .photo-section, .photo2 {
+      height: 50vh; position: relative;
+      background-size: cover; background-position: center;
+      background-attachment: fixed;
+    }
+    .photo-section { background-image: url('couple-large.jpg'); }
+    .photo2         { background-image: url('couple2-large.jpg'); }
+    .photo-section::after, .photo2::after {
+      content: ''; position: absolute; inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+
+    .wrapper {
+      max-width: 1000px; margin: 0 auto; padding: 4rem 1rem;
+    }
+
+    .section {
+      margin-bottom: 4rem; text-align: center; position: relative;
+    }
+    .section h2 {
+      font-family: 'Great Vibes', cursive; font-size: 3rem;
+      margin-bottom: 1rem; display: inline-block; position: relative;
+      color: #fff;
+    }
+    .section h2::after {
+      content: ''; position: absolute; bottom:-8px; left:50%;
+      width:50px; height:2px; background:#8f15b3;
+      transform:translateX(-50%);
+    }
+    .section p {
+      max-width:700px; margin:0 auto 2rem;
+      color:#d8cfde; position: relative; padding-bottom:1rem;
+    }
+    .section p::after {
+      content: ''; position: absolute; bottom:0; left:50%;
+      width:80px; height:2px; background:#ddd;
+      transform:translateX(-50%);
+    }
+
+    /* О нас */
+    .portraits {
+      display:flex; justify-content:center; gap:3rem; flex-wrap:wrap;
+    }
+    .portrait {
+      width:200px; height:200px; background:#333 center/cover no-repeat;
+      border-radius:50%; border:4px solid rgba(255,255,255,0.2);
+      box-shadow:0 4px 10px rgba(0,0,0,0.5);
+    }
+    .portrait + h3 {
+      margin-top:.5rem; font-size:1.1rem; color:#e8d8f4;
+      text-transform:uppercase; letter-spacing:1px;
+    }
+
+    /* Информация */
+    .info-grid {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+      gap:2rem; margin-top:2rem;
+    }
+    .info-card {
+      background:rgba(255,255,255,0.1); backdrop-filter:blur(4px);
+      padding:1.5rem; border-radius:8px; color:#f0e6fb;
+      text-align:left; position:relative;
+    }
+    .info-card h3 {
+      font-family:'Great Vibes',cursive; font-size:1.5rem;
+      margin-bottom:.5rem; color:#fff;
+    }
+    .info-card p {
+      margin:0; font-size:1rem; padding-bottom:1rem;
+    }
+    .info-card p::after {
+      content:''; position:absolute; bottom:0; left:50%;
+      width:50px; height:2px; background:#ddd;
+      transform:translateX(-50%);
+    }
+
+    /* Палитра */
+    .palette {
+      display:flex; gap:1.5rem; justify-content:center; margin-top:2rem;
+    }
+    .circle {
+      width:60px; height:60px; border-radius:50%;
+      box-shadow:0 2px 8px rgba(0,0,0,0.5);
+      position:relative; cursor:default;
+    }
+    .c1{background:#0d0d0d;} .c2{background:#2e004f;}
+    .c3{background:#4a0d67;} .c4{background:#6a0e8d;}
+    .c5{background:#8f15b3;} .c6{background:rgb(113,113,201);}
+    .circle[data-tooltip]:hover::after {
+      content: attr(data-tooltip);
+      position: absolute; bottom:100%; left:50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7); color:#fff;
+      padding:4px 8px; border-radius:4px;
+      white-space:nowrap; font-size:0.8rem;
+      margin-bottom:6px; pointer-events:none; opacity:0.9;
+    }
+
+    /* Когда/Где + карта */
+    .when-where {
+      display:flex; justify-content:center; align-items:center;
+      gap:2rem; flex-wrap:wrap; margin-bottom:1rem;
+    }
+    .when-where > div {
+      flex:1; min-width:200px; text-align:center;
+    }
+    .when-where h3 {
+      font-size:1.2rem; color:#ddd; text-transform:uppercase;
+      margin-bottom:.5rem; letter-spacing:1px;
+    }
+    .when-where p {
+      font-size:1rem; color:#f0e6fb;
+    }
+    .when-where .divider {
+      width:2px; height:60px; background:#ddd;
+    }
+    .map-container {
+      position:relative; overflow:hidden; max-width:600px;
+      margin:0 auto 2rem; border-radius:8px;
+      box-shadow:0 4px 15px rgba(0,0,0,0.5);
+    }
+    .map-container iframe {
+      width:100%; height:300px; border:none;
+    }
+
+    /* 2. Галерея */
+    .gallery {
+      display:flex; justify-content:center; gap:1rem; margin:2rem 0;
+    }
+    .gallery img {
+      width:30%; /* три одинаковых */
+      object-fit:cover;
+      border-radius:8px;
+      box-shadow:0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .registration-text {
+      max-width:600px; margin:0 auto 3rem;
+      font-size:1rem; color:#e0d8e8; line-height:1.4;
+    }
+
+    /* Footer */
+    footer {
+      text-align:center; padding:2rem 1rem; color:#aaa;
+      font-size:.9rem;
+    }
+    .toTop {
+      display:block; font-size:2rem; margin-bottom:1rem;
+      color:#8f15b3; transition:color .3s;
+    }
+    .toTop:hover { color:#fff; }
+
+    @media(max-width:768px){
+      .when-where{flex-direction:column;}
+      .when-where .divider{display:none;}
+      .info-grid{grid-template-columns:1fr;}
+      .gallery { flex-direction:column; }
+      .gallery img { width:80%; margin:0 auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <ul class="nav-dots">
+    <li><a href="#top"    data-tooltip="Главная"></a></li>
+    <li><a href="#about"  data-tooltip="Приглашение"></a></li>
+    <li><a href="#info"   data-tooltip="Информация"></a></li>
+    <li><a href="#palette"data-tooltip="Палитра"></a></li>
+    <li><a href="#schedule" data-tooltip="Карта"></a></li>
+  </ul>
+
+  <div id="top"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="card">
+      <h1>Анастасия<br>+<br>Владислав</h1>
+      <div class="date-block">
+        <div class="main">
+          <div class="line"></div>
+          <div class="day">23</div>
+          <div class="line"></div>
+        </div>
+        <div class="sub"><div>Четверг</div><div>июля</div></div>
+        <div class="year">2026</div>
+      </div>
+      <p class="hero-subtext">
+        БУДЕМ СЧАСТЛИВЫ РАЗДЕЛИТЬ НАШ САМЫЙ НЕЗАБЫВАЕМЫЙ ДЕНЬ<br>ВМЕСТЕ С ВАМИ
+      </p>
+    </div>
+  </section>
+
+  <!-- Параллакс фото #1 -->
+  <section class="photo-section"></section>
+
+  <div class="wrapper">
+
+    <!-- О нас -->
+    <section id="about" class="section">
+      <h2>Дорогой Гость!</h2>
+      <p>Мы рады сообщить, что состоится самое главное торжество в нашей жизни — день нашей свадьбы! Приглашаем вас разделить с нами радость этого незабываемого дня.</p>
+      <div class="portraits">
+        <div>
+          <div class="portrait" style="background-image:url('groom.jpg');"></div>
+          <h3>Жених</h3>
+        </div>
+        <div>
+          <div class="portrait" style="background-image:url('bride.jpg');"></div>
+          <h3>Невеста</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- Меню и подарки -->
+    <section id="info" class="section">
+      <h2>Информация</h2>
+      <div class="info-grid">
+        <div class="info-card">
+          <h3>Меню</h3>
+          <p>Меню разнообразно, поэтому сообщите нам заранее о предпочтениях и диетических ограничения. После подтверждения вы сможете пройти опрос о блюдах и напитках.</p>
+        </div>
+        <div class="info-card">
+          <h3>Пожелания по подаркам</h3>
+          <p>Ваше присутствие — лучший подарок! Альтернативы цветам: вино или денежный эквивалент.</p>
+        </div>
+        <div class="info-card">
+          <h3>Примечание</h3>
+          <p>Просьба воздержаться от криков «Горько» — поцелуй нельзя заказывать.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Палитра -->
+    <section id="palette" class="section">
+      <h2>Цветовая палитра одежды</h2>
+      <div class="palette">
+        <div class="circle c1" data-tooltip="Чёрный"></div>
+        <div class="circle c2" data-tooltip="Тёмно-фиолетовый"></div>
+        <div class="circle c3" data-tooltip="Сливовый"></div>
+        <div class="circle c4" data-tooltip="Фиолетовый"></div>
+        <div class="circle c5" data-tooltip="Светло-фиолетовый"></div>
+        <div class="circle c6" data-tooltip="Лавандовый"></div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Параллакс фото #2 -->
+  <section class="photo2"></section>
+
+  <div class="wrapper">
+
+    <!-- Когда/Где + карта -->
+    <section id="schedule" class="section">
+      <h2>Где тусуемся?</h2>
+      <div class="when-where">
+        <div><h3>Когда</h3><p>23.08.2026 - 18:00</p></div>
+        <div><h3>Где</h3><p>Иркутский район, деревня Новогрудинина, Гостиница Курма</p></div>
+      </div>
+
+      <div class="map-container">
+        <a href="https://yandex.ru/maps/org/kurma/182559881198/?utm_medium=mapframe&utm_source=maps"
+           style="position:absolute;top:0;left:0;color:#030303;font-size:12px;">- Гостиница Курма -</a>
+        <iframe src="https://yandex.ru/map-widget/v1/?ll=104.438260%2C52.062510&mode=poi&poi%5Bpoint%5D=104.439374%2C52.060928&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D182559881198&utm_source=main_stripe_big&z=15"
+                allowfullscreen></iframe>
+      </div>
+      <p class="registration-text">
+        Здесь пройдет наша регистрация. Приглашаем всех разделить с нами такой торжественный момент.
+      </p>
+    </section>
+
+      <!-- 2. Галерея из 3 фотографий -->
+      <div class="gallery">
+        <img src="gallery1.jpg" alt="Фото 1">
+        <img src="gallery2.jpg" alt="Фото 2">
+        <img src="gallery3.jpg" alt="Фото 3">
+      </div>
+
+  </div>
+
+  <!-- Футер -->
+  <footer>
+    <a href="#top" class="toTop">↑ Наверх</a>
+    <p>Если у вас есть вопрос, пишите:</p>
+    <p><a href="https://t.me/Ananas112324" target="_blank">Телеграм Невесты</a> | <a href="https://t.me/FROGIX" target="_blank">Телеграм Жениха</a></p>
+    <p>© 2025 NeoWave Games</p>
+  </footer>
+</body>
+</html>
